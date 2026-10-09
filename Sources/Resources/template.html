@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="github-markdown-light.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="github-markdown-dark.css" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="hljs-github.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="hljs-github-dark.css" media="(prefers-color-scheme: dark)">
+<script src="marked.min.js"></script>
+<script src="highlight.min.js"></script>
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+  }
+  body {
+    box-sizing: border-box;
+    padding: 40px 56px 80px;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+  }
+  .markdown-body {
+    max-width: 820px;
+    margin: 0 auto;
+    background: transparent;
+    font-size: 15px;
+    line-height: 1.65;
+  }
+  .markdown-body pre {
+    background: rgba(127, 127, 127, 0.08);
+  }
+  @media (prefers-color-scheme: dark) {
+    body { color: #e6edf3; }
+  }
+  ::selection { background: rgba(88, 166, 255, 0.35); }
+</style>
+</head>
+<body>
+<article id="content" class="markdown-body"></article>
+<script>
+  marked.setOptions({
+    gfm: true,
+    breaks: false,
+    smartypants: false,
+    highlight: function (code, lang) {
+      try {
+        if (lang && hljs.getLanguage(lang)) {
+          return hljs.highlight(code, { language: lang, ignoreIllegals: true }).value;
+        }
+        return hljs.highlightAuto(code).value;
+      } catch (_) {
+        return code;
+      }
+    }
+  });
+
+  function render(md) {
+    const html = marked.parse(md || "");
+    const el = document.getElementById("content");
+    el.innerHTML = html;
+    el.querySelectorAll("pre code").forEach(function (b) {
+      if (!b.classList.contains("hljs")) {
+        try { hljs.highlightElement(b); } catch (_) {}
+      }
+    });
+    el.querySelectorAll('a[href]').forEach(function (a) {
+      a.setAttribute("target", "_blank");
+    });
+  }
+
+  window.setMarkdown = function (md) { render(md); };
+</script>
+</body>
+</html>

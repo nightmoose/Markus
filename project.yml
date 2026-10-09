@@ -1,0 +1,67 @@
+name: Markus
+options:
+  bundleIdPrefix: com.nightmoose
+  deploymentTarget:
+    macOS: "13.0"
+targets:
+  Markus:
+    type: application
+    platform: macOS
+    sources:
+      - path: Sources
+        excludes:
+          - "Info.plist"
+    info:
+      path: Sources/Info.plist
+      properties:
+        CFBundleDisplayName: Markus
+        CFBundleShortVersionString: "1.0"
+        CFBundleVersion: "1"
+        CFBundleIconFile: AppIcon
+        LSApplicationCategoryType: public.app-category.utilities
+        NSHumanReadableCopyright: ""
+        CFBundleDocumentTypes:
+          - CFBundleTypeName: Markdown Document
+            CFBundleTypeRole: Editor
+            LSHandlerRank: Owner
+            LSItemContentTypes:
+              - net.daringfireball.markdown
+            CFBundleTypeExtensions:
+              - md
+              - markdown
+              - mdown
+              - mkd
+              - mkdn
+        UTImportedTypeDeclarations:
+          - UTTypeIdentifier: net.daringfireball.markdown
+            UTTypeDescription: Markdown Document
+            UTTypeConformsTo:
+              - public.plain-text
+            UTTypeTagSpecification:
+              public.filename-extension:
+                - md
+                - markdown
+                - mdown
+                - mkd
+                - mkdn
+              public.mime-type:
+                - text/markdown
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: NO
+        SWIFT_VERSION: "5.9"
+        MACOSX_DEPLOYMENT_TARGET: "13.0"
+        CODE_SIGN_STYLE: Automatic
+        CODE_SIGN_IDENTITY: "-"
+        ENABLE_HARDENED_RUNTIME: YES
+        PRODUCT_NAME: Markus
+        PRODUCT_BUNDLE_IDENTIFIER: com.nightmoose.markus
+        # Xcode's Derived Data is wiped without warning. Build the app
+        # straight into ~/Applications so the Dock copy survives.
+        CONFIGURATION_BUILD_DIR: "$(HOME)/Applications"
+        DWARF_DSYM_FOLDER_PATH: "$(SRCROOT)/build/dSYM"
+    postBuildScripts:
+      - name: Hide build sidecars
+        basedOnDependencyAnalysis: false
+        script: |
+          rm -rf "${HOME}/Applications/${PRODUCT_NAME}.swiftmodule"
